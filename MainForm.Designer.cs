@@ -55,7 +55,6 @@ namespace OMMAuto
             this.label6 = new System.Windows.Forms.Label();
             this.lblCommInfo = new System.Windows.Forms.Label();
             this.grpCmmState = new System.Windows.Forms.GroupBox();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.timerlog = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.txtLog = new System.Windows.Forms.TextBox();
@@ -368,10 +367,6 @@ namespace OMMAuto
             this.grpCmmState.TabStop = false;
             this.grpCmmState.Text = "OMM软件状态";
             // 
-            // openFileDialog
-            // 
-            this.openFileDialog.FileName = "openFileDialog";
-            // 
             // timerlog
             // 
             this.timerlog.Enabled = true;
@@ -449,7 +444,6 @@ namespace OMMAuto
 
         private System.Windows.Forms.Panel panelMiddle;
         private System.Windows.Forms.GroupBox grpCmmState;
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Timer timerlog;
         private System.Windows.Forms.Panel panelOperate;
         private System.Windows.Forms.GroupBox grpAgvConnection;

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.35731.53
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "OMMSetup", "OMMSetup.vdproj", "{E1800102-B5F6-4A9F-947C-8E6C71E2CAD4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E1800102-B5F6-4A9F-947C-8E6C71E2CAD4}.Debug|Default.ActiveCfg = Debug
+		{E1800102-B5F6-4A9F-947C-8E6C71E2CAD4}.Debug|Default.Build.0 = Debug
+		{E1800102-B5F6-4A9F-947C-8E6C71E2CAD4}.Release|Default.ActiveCfg = Release
+		{E1800102-B5F6-4A9F-947C-8E6C71E2CAD4}.Release|Default.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A6E49AC0-0C72-45CD-9418-8F430B61E5FE}
+	EndGlobalSection
+EndGlobal
