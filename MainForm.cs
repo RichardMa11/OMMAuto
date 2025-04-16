@@ -22,10 +22,10 @@ namespace OMMAuto
 {
     public partial class MainForm : Form
     {
-        private ModbusUitl _modbusUitl;
-
         private static readonly ILog Log = LogManager.GetLogger(typeof(MainForm));
         private SQLiteHelper _sqLiteHelpers = null;
+        private ModbusUitl _modbusUitl;
+        private FrmConfig _frmConfig;
 
         public MainForm()
         {
@@ -171,6 +171,25 @@ namespace OMMAuto
             ConnPlc();
         }
 
+        //FormClosing是在窗体即将关闭但还未关闭时触发，这时候还可以取消关闭操作，比如弹出确认对话框，用户点击取消，那么窗体就不会关闭。
+        //而FormClosed是在窗体已经关闭之后触发，这时候窗体已经不可见了，只能执行一些清理工作，比如释放资源或者记录日志，但无法阻止关闭。
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var result = MessageBoxX.Show("是否退出？", "提示", null, MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.No)
+                e.Cancel = true; // 阻止关闭
+
+            //if (!isClosingByAnimation && e.CloseReason != CloseReason.ApplicationExitCall)
+            //{
+            //    e.Cancel = true;  // 阻止直接关闭
+
+            //    var result = MessageBoxX.Show("是否退出？", "提示", null, MessageBoxButton.YesNo);
+            //    if (result == MessageBoxResult.Yes)
+            //        CloseWindow();     // 启动动画
+            //}
+        }
+
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             _sqLiteHelpers.Close();
@@ -283,25 +302,6 @@ namespace OMMAuto
             }
         }
 
-        //FormClosing是在窗体即将关闭但还未关闭时触发，这时候还可以取消关闭操作，比如弹出确认对话框，用户点击取消，那么窗体就不会关闭。
-        //而FormClosed是在窗体已经关闭之后触发，这时候窗体已经不可见了，只能执行一些清理工作，比如释放资源或者记录日志，但无法阻止关闭。
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            var result = MessageBoxX.Show("是否退出？", "提示", null, MessageBoxButton.YesNo);
-
-            if (result == MessageBoxResult.No)
-                e.Cancel = true; // 阻止关闭
-
-            //if (!isClosingByAnimation && e.CloseReason != CloseReason.ApplicationExitCall)
-            //{
-            //    e.Cancel = true;  // 阻止直接关闭
-
-            //    var result = MessageBoxX.Show("是否退出？", "提示", null, MessageBoxButton.YesNo);
-            //    if (result == MessageBoxResult.Yes)
-            //        CloseWindow();     // 启动动画
-            //}
-        }
-
         public void ReadPlc()
         {
             _modbusUitl.ReadHoldingRegisters(262, 1);
@@ -329,7 +329,6 @@ namespace OMMAuto
             }
         }
 
-        private FrmConfig _frmConfig;
         private void btnConfigPlcAddress_Click(object sender, EventArgs e)
         {
             if (_frmConfig == null || _frmConfig.IsDisposed)
@@ -399,6 +398,8 @@ namespace OMMAuto
 
             MessageBoxX.Show($"保存PLCIp成功", "提示");
         }
+
+        #region 与PLC交互
 
         private void CheckPlc()
         {
@@ -495,6 +496,8 @@ namespace OMMAuto
             return dt;
         }
 
+        #endregion
+        
         #region 关闭窗体动画
 
         // 可选：声明动画完成事件
