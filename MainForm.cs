@@ -30,6 +30,7 @@ namespace OMMAuto
         private SQLiteHelper _sqLiteHelpers = null;
         private FrmConfig _frmConfig;
         private FrmQueryPlc _frmQueryPlc;
+        private FrmDicConfig _frmDicConfig;
         private ModbusUitl _modbusUitl;
         private static ApiClient _apiClient;
 
@@ -842,6 +843,17 @@ namespace OMMAuto
             }
             _frmQueryPlc.Show();
             _frmQueryPlc.BringToFront();  // 激活并置顶窗体
+        }
+
+        private void btnDicConfig_Click(object sender, EventArgs e)
+        {
+            if (_frmDicConfig == null || _frmDicConfig.IsDisposed)
+            {
+                _frmDicConfig = new FrmDicConfig(_sqLiteHelpers);
+                _frmDicConfig.FormClosed += (s, args) => { _frmDicConfig = null; };
+            }
+            _frmDicConfig.Show();
+            _frmDicConfig.BringToFront();  // 激活并置顶窗体
         }
     }
 

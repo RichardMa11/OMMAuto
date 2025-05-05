@@ -42,6 +42,7 @@ namespace OMMAuto
             this.btnSaveHttp = new System.Windows.Forms.Button();
             this.panelAgvOperate = new System.Windows.Forms.Panel();
             this.grpAgvOperate = new System.Windows.Forms.GroupBox();
+            this.lblPlcState = new System.Windows.Forms.Label();
             this.btnSavePLC = new System.Windows.Forms.Button();
             this.btnQueryPlc = new System.Windows.Forms.Button();
             this.btnConfigPlcAddress = new System.Windows.Forms.Button();
@@ -76,7 +77,7 @@ namespace OMMAuto
             this.label3 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.txtOther = new System.Windows.Forms.TextBox();
-            this.lblPlcState = new System.Windows.Forms.Label();
+            this.btnDicConfig = new System.Windows.Forms.Button();
             this.panelMiddle.SuspendLayout();
             this.panel1.SuspendLayout();
             this.grpLog.SuspendLayout();
@@ -169,6 +170,7 @@ namespace OMMAuto
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnDicConfig);
             this.groupBox1.Controls.Add(this.btnTest);
             this.groupBox1.Controls.Add(this.btnSaveHttp);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -240,6 +242,22 @@ namespace OMMAuto
             this.grpAgvOperate.TabIndex = 4;
             this.grpAgvOperate.TabStop = false;
             this.grpAgvOperate.Text = "PLC操作";
+            // 
+            // lblPlcState
+            // 
+            this.lblPlcState.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblPlcState.AutoSize = true;
+            this.lblPlcState.BackColor = System.Drawing.Color.Red;
+            this.lblPlcState.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblPlcState.ForeColor = System.Drawing.Color.White;
+            this.lblPlcState.Location = new System.Drawing.Point(22, 134);
+            this.lblPlcState.Name = "lblPlcState";
+            this.lblPlcState.Size = new System.Drawing.Size(300, 33);
+            this.lblPlcState.TabIndex = 10;
+            this.lblPlcState.Text = "PLC连接断开......";
+            this.lblPlcState.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnSavePLC
             // 
@@ -650,21 +668,22 @@ namespace OMMAuto
             this.txtOther.Size = new System.Drawing.Size(21, 16);
             this.txtOther.TabIndex = 19;
             // 
-            // lblPlcState
+            // btnDicConfig
             // 
-            this.lblPlcState.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblPlcState.AutoSize = true;
-            this.lblPlcState.BackColor = System.Drawing.Color.Red;
-            this.lblPlcState.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblPlcState.ForeColor = System.Drawing.Color.White;
-            this.lblPlcState.Location = new System.Drawing.Point(22, 134);
-            this.lblPlcState.Name = "lblPlcState";
-            this.lblPlcState.Size = new System.Drawing.Size(300, 33);
-            this.lblPlcState.TabIndex = 10;
-            this.lblPlcState.Text = "PLC连接断开......";
-            this.lblPlcState.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btnDicConfig.BackColor = System.Drawing.Color.LightBlue;
+            this.btnDicConfig.FlatAppearance.BorderSize = 0;
+            this.btnDicConfig.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightGray;
+            this.btnDicConfig.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.btnDicConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDicConfig.ForeColor = System.Drawing.Color.DarkBlue;
+            this.btnDicConfig.Location = new System.Drawing.Point(52, 78);
+            this.btnDicConfig.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnDicConfig.Name = "btnDicConfig";
+            this.btnDicConfig.Size = new System.Drawing.Size(96, 42);
+            this.btnDicConfig.TabIndex = 22;
+            this.btnDicConfig.Text = "数据字典";
+            this.btnDicConfig.UseVisualStyleBackColor = true;
+            this.btnDicConfig.Click += new System.EventHandler(this.btnDicConfig_Click);
             // 
             // MainForm
             // 
@@ -753,6 +772,7 @@ namespace OMMAuto
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnSaveHttp;
         private System.Windows.Forms.Label lblPlcState;
+        private System.Windows.Forms.Button btnDicConfig;
     }
 }
 

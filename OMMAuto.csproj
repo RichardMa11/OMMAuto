@@ -99,6 +99,12 @@
     <Compile Include="CommonHelp\PollingService.cs" />
     <Compile Include="CommonHelp\SQLiteHelper.cs" />
     <Compile Include="Extension\ConvertExtension.cs" />
+    <Compile Include="FrmDicConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDicConfig.Designer.cs">
+      <DependentUpon>FrmDicConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +125,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmDicConfig.resx">
+      <DependentUpon>FrmDicConfig.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmConfig.resx">
       <DependentUpon>FrmConfig.cs</DependentUpon>
     </EmbeddedResource>
@@ -158,6 +167,8 @@
     <Content Include="dll\Newtonsoft.Json.dll" />
     <Content Include="dll\Panuon.UI.Silver.dll" />
     <Content Include="dll\System.Data.SQLite.dll" />
+    <Content Include="Resources\icon\data.ico" />
+    <Content Include="Resources\icon\edit.ico" />
     <Content Include="Resources\icon\modbus.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
