@@ -1,7 +1,7 @@
 ﻿
 namespace OMMAuto
 {
-    partial class FrmConfig
+    partial class FrmQueryPlc
     {
         /// <summary>
         /// Required designer variable.
@@ -31,14 +31,16 @@ namespace OMMAuto
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmConfig));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmQueryPlc));
             this.mainPanel = new System.Windows.Forms.TableLayoutPanel();
             this.bottomPanel = new System.Windows.Forms.Panel();
-            this.lblCommInfo = new System.Windows.Forms.Label();
-            this.btnAdd = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
+            this.btnRW = new System.Windows.Forms.Button();
             this.grvConfig = new System.Windows.Forms.DataGridView();
-            this.btnImport = new System.Windows.Forms.Button();
+            this.txtWrite = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.txtRead = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             this.bottomPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grvConfig)).BeginInit();
@@ -62,61 +64,34 @@ namespace OMMAuto
             // bottomPanel
             // 
             this.bottomPanel.BackColor = System.Drawing.Color.White;
-            this.bottomPanel.Controls.Add(this.btnImport);
-            this.bottomPanel.Controls.Add(this.lblCommInfo);
-            this.bottomPanel.Controls.Add(this.btnAdd);
-            this.bottomPanel.Controls.Add(this.btnSave);
+            this.bottomPanel.Controls.Add(this.btnRefresh);
+            this.bottomPanel.Controls.Add(this.txtRead);
+            this.bottomPanel.Controls.Add(this.label1);
+            this.bottomPanel.Controls.Add(this.txtWrite);
+            this.bottomPanel.Controls.Add(this.label13);
+            this.bottomPanel.Controls.Add(this.btnRW);
             this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bottomPanel.Location = new System.Drawing.Point(3, 400);
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(774, 54);
             this.bottomPanel.TabIndex = 3;
             // 
-            // lblCommInfo
+            // btnRW
             // 
-            this.lblCommInfo.AutoSize = true;
-            this.lblCommInfo.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblCommInfo.ForeColor = System.Drawing.Color.Red;
-            this.lblCommInfo.Location = new System.Drawing.Point(273, 20);
-            this.lblCommInfo.Name = "lblCommInfo";
-            this.lblCommInfo.Size = new System.Drawing.Size(212, 16);
-            this.lblCommInfo.TabIndex = 9;
-            this.lblCommInfo.Text = "注：修改保存后要重启软件";
-            this.lblCommInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.BackColor = System.Drawing.Color.LightBlue;
-            this.btnAdd.FlatAppearance.BorderSize = 0;
-            this.btnAdd.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightGray;
-            this.btnAdd.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
-            this.btnAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAdd.ForeColor = System.Drawing.Color.DarkBlue;
-            this.btnAdd.Location = new System.Drawing.Point(142, 7);
-            this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(96, 42);
-            this.btnAdd.TabIndex = 3;
-            this.btnAdd.Text = "新增一行";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.BackColor = System.Drawing.Color.LightBlue;
-            this.btnSave.FlatAppearance.BorderSize = 0;
-            this.btnSave.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightGray;
-            this.btnSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
-            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.ForeColor = System.Drawing.Color.DarkBlue;
-            this.btnSave.Location = new System.Drawing.Point(20, 7);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(96, 42);
-            this.btnSave.TabIndex = 2;
-            this.btnSave.Text = "保存配置";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.btnRW.BackColor = System.Drawing.Color.LightBlue;
+            this.btnRW.FlatAppearance.BorderSize = 0;
+            this.btnRW.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightGray;
+            this.btnRW.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.btnRW.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRW.ForeColor = System.Drawing.Color.DarkBlue;
+            this.btnRW.Location = new System.Drawing.Point(20, 7);
+            this.btnRW.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnRW.Name = "btnRW";
+            this.btnRW.Size = new System.Drawing.Size(96, 42);
+            this.btnRW.TabIndex = 2;
+            this.btnRW.Text = "读  取";
+            this.btnRW.UseVisualStyleBackColor = true;
+            this.btnRW.Click += new System.EventHandler(this.btnRW_Click);
             // 
             // grvConfig
             // 
@@ -145,24 +120,64 @@ namespace OMMAuto
             this.grvConfig.TabIndex = 4;
             this.grvConfig.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.grvConfig_CellValidating);
             // 
-            // btnImport
+            // txtWrite
             // 
-            this.btnImport.BackColor = System.Drawing.Color.LightBlue;
-            this.btnImport.FlatAppearance.BorderSize = 0;
-            this.btnImport.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightGray;
-            this.btnImport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
-            this.btnImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnImport.ForeColor = System.Drawing.Color.DarkBlue;
-            this.btnImport.Location = new System.Drawing.Point(660, 7);
-            this.btnImport.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnImport.Name = "btnImport";
-            this.btnImport.Size = new System.Drawing.Size(96, 42);
-            this.btnImport.TabIndex = 10;
-            this.btnImport.Text = "一键导入";
-            this.btnImport.UseVisualStyleBackColor = true;
-            this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
+            this.txtWrite.Location = new System.Drawing.Point(210, 16);
+            this.txtWrite.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtWrite.Name = "txtWrite";
+            this.txtWrite.Size = new System.Drawing.Size(116, 23);
+            this.txtWrite.TabIndex = 18;
+            this.txtWrite.Text = "ABCD00001";
+            this.txtWrite.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // FrmConfig
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.ForeColor = System.Drawing.Color.Gray;
+            this.label13.Location = new System.Drawing.Point(137, 19);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(56, 17);
+            this.label13.TabIndex = 17;
+            this.label13.Text = "写入值：";
+            // 
+            // txtRead
+            // 
+            this.txtRead.Location = new System.Drawing.Point(427, 16);
+            this.txtRead.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtRead.Name = "txtRead";
+            this.txtRead.Size = new System.Drawing.Size(116, 23);
+            this.txtRead.TabIndex = 20;
+            this.txtRead.Text = "ABCD00001";
+            this.txtRead.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.Gray;
+            this.label1.Location = new System.Drawing.Point(354, 19);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(56, 17);
+            this.label1.TabIndex = 19;
+            this.label1.Text = "读取值：";
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.BackColor = System.Drawing.Color.LightBlue;
+            this.btnRefresh.FlatAppearance.BorderSize = 0;
+            this.btnRefresh.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightGray;
+            this.btnRefresh.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRefresh.ForeColor = System.Drawing.Color.DarkBlue;
+            this.btnRefresh.Location = new System.Drawing.Point(669, 6);
+            this.btnRefresh.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(96, 42);
+            this.btnRefresh.TabIndex = 21;
+            this.btnRefresh.Text = "刷  新";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
+            // FrmQueryPlc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -173,9 +188,9 @@ namespace OMMAuto
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "FrmConfig";
+            this.Name = "FrmQueryPlc";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PLC信号地址配置";
+            this.Text = "PLC值查询";
             this.mainPanel.ResumeLayout(false);
             this.bottomPanel.ResumeLayout(false);
             this.bottomPanel.PerformLayout();
@@ -187,11 +202,13 @@ namespace OMMAuto
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel mainPanel;
-        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnRW;
         private System.Windows.Forms.Panel bottomPanel;
         private System.Windows.Forms.DataGridView grvConfig;
-        private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.Label lblCommInfo;
-        private System.Windows.Forms.Button btnImport;
+        private System.Windows.Forms.TextBox txtRead;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtWrite;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button btnRefresh;
     }
 }
