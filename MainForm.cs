@@ -775,7 +775,7 @@ namespace OMMAuto
             // 初始化客户端
             //var apiClient = new ApiClient("https://api.example.com/v1");
             // 设置认证令牌
-            _apiClient.SetBearerToken("your-access-token");
+            //_apiClient.SetBearerToken("your-access-token");
 
             try
             {
@@ -786,11 +786,14 @@ namespace OMMAuto
                 //});
 
                 // POST 请求示例
-                var newOrder = await _apiClient.PostAsync<User>("/orders", new
+                var requestData = new TestRequest
                 {
-                    productId = 456,
-                    quantity = 2
-                });
+                    Message = "Hello API",
+                    Numbers = new[] { 1, 2, 3 },
+                    IsTestMode = true
+                };
+
+                var newOrder = await _apiClient.PostAsync<TestResponse>("/api/testpost", requestData);
             }
             catch (HttpRequestException ex)
             {
@@ -871,10 +874,18 @@ namespace OMMAuto
         public static List<PlcInfo> PlcInfos = new List<PlcInfo>();
     }
 
-    public class User
+    public class TestRequest
     {
-        public string include { get; set; }
+        public string Message { get; set; }       // 字符串参数
+        public int[] Numbers { get; set; }         // 数组参数
+        public bool IsTestMode { get; set; }       // 布尔参数
+    }
 
-        public int profile { get; set; }
+    public class TestResponse
+    {
+        public string Status { get; set; }
+        public string ReceivedMessage { get; set; }
+        public int TotalNumbers { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }
