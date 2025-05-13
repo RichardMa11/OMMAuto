@@ -1,8 +1,11 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 using log4net;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
 
 namespace OMMAuto.CommonHelp
 {
@@ -67,5 +70,29 @@ namespace OMMAuto.CommonHelp
         //    var imageFileName = $"{CommonConstant.TAG}.{CommonConstant.IMAGE_SUFFIX}";
         //    tagBitmap.Save(Path.Combine(imagePath, imageFileName));
         //}
+
+        public static ImageData GetPicImageData(Bitmap sourceImage)
+        {
+            try
+            {
+                var mat = new Bitmap(sourceImage).ToMat();
+                //Cv2.CvtColor(mat,mat,ColorConversionCodes.BGRA2GRAY);
+                Cv2.CvtColor(mat, mat, ColorConversionCodes.BGRA2BGR);
+                ImageData imageData = new ImageData
+                {
+                    Image = mat.Data,
+                    Width = mat.Width,
+                    Height = mat.Height,
+                    Channels = mat.Channels()
+                };
+
+                return imageData;
+            }
+            catch (Exception ex)
+            {
+                log.Error($"GetPicImageData出错：{ex.Message + ex.StackTrace}");
+                throw;
+            }
+        }
     }
 }

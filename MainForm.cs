@@ -38,7 +38,7 @@ namespace OMMAuto
         private static ApiClient _apiClientOmm;
         private static ApiClient _apiClientSend;
         private static int _status = 0;
-        private static string _fullFileName = "";
+        //private static string _fullFileName = "";
         private static string _IwpName = "";
 
         private delegate void LogTxtDelegate();
@@ -48,7 +48,6 @@ namespace OMMAuto
         {
             InitializeComponent();
             InitSqliteHelps();
-            InitScreenImgPath();
             InitApiClient();
         }
 
@@ -86,7 +85,7 @@ namespace OMMAuto
             if (!Directory.Exists(basePath))
                 Directory.CreateDirectory(basePath);
 
-            _fullFileName = Path.Combine(basePath, $"AutoScreenflash.jpg");
+            //_fullFileName = Path.Combine(basePath, $"AutoScreenflash.jpg");
         }
 
         private string GetImageBasePath()
@@ -242,12 +241,7 @@ namespace OMMAuto
                 try
                 {
                     if (chkIsStatusCheck.Checked)
-                    {
-                        var imageBitmap = ScreenShotHelp.GetImage();
-                        imageBitmap.Save(_fullFileName, ImageFormat.Jpeg);
-
                         SetState(GetOmmStatus().Result.runStatus.StrToInt());
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -1028,7 +1022,7 @@ namespace OMMAuto
                     {
                         Status = _status,
                         Ip = _ip,
-                        //ImageData = _cmmVisionHelp.GetPicImageData(_fullFileName)
+                        ImageData = ScreenShotHelp.GetPicImageData(ScreenShotHelp.GetImage())
                     };
 
                     await _apiClientSend.PostAsync<Response>(Global.CfgInfos.Count(p => p.Key == "InterfaceName") != 0 ?
@@ -1079,7 +1073,7 @@ namespace OMMAuto
 
         private void btnIwpCfg_Click(object sender, EventArgs e)
         {
-
+            // 启动需要的信息配置（类似CMM的程式编辑，要建表）
         }
 
         private void PoolSendAi()
@@ -1108,16 +1102,7 @@ namespace OMMAuto
             {
                 try
                 {
-                    // POST 请求示例
-                    var requestData = new Request
-                    {
-                        Status = _status,
-                        Ip = _ip,
-                        //ImageData = _cmmVisionHelp.GetPicImageData(_fullFileName)
-                    };
-
-                    await _apiClientSend.PostAsync<Response>(Global.CfgInfos.Count(p => p.Key == "InterfaceName") != 0 ?
-                        Global.CfgInfos.First(p => p.Key == "InterfaceName").Value : "/api/testpost", requestData);
+                   // 和强强约定写本地txt文件
                 }
                 catch (HttpRequestException ex)
                 {
