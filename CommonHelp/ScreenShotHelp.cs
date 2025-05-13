@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using log4net;
 
-namespace CMMAuto.CommonHelp
+namespace OMMAuto.CommonHelp
 {
     public class ScreenShotHelp
     {

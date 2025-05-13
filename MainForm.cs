@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -15,6 +16,7 @@ using KENDLL.Common;
 using log4net;
 using log4net.Appender;
 using OMMAuto.CommonHelp;
+using OMMAuto.Config;
 using OMMAuto.Extension;
 using Panuon.UI.Silver;
 
@@ -32,14 +34,22 @@ namespace OMMAuto
         private FrmQueryPlc _frmQueryPlc;
         private FrmDicConfig _frmDicConfig;
         private ModbusUitl _modbusUitl;
-        private static ApiClient _apiClient;
+        private static string _ip = "127.0.0.1";
+        private static ApiClient _apiClientOmm;
+        private static ApiClient _apiClientSend;
+        private static int _status = 0;
+        private static string _fullFileName = "";
+        private static string _IwpName = "";
 
         private delegate void LogTxtDelegate();
+        private delegate void SetStateDelegate();
 
         public MainForm()
         {
             InitializeComponent();
             InitSqliteHelps();
+            InitScreenImgPath();
+            InitApiClient();
         }
 
         private void InitSqliteHelps()
@@ -70,9 +80,61 @@ namespace OMMAuto
             return path;
         }
 
+        private void InitScreenImgPath()
+        {
+            var basePath = GetImageBasePath();
+            if (!Directory.Exists(basePath))
+                Directory.CreateDirectory(basePath);
+
+            _fullFileName = Path.Combine(basePath, $"AutoScreenflash.jpg");
+        }
+
+        private string GetImageBasePath()
+        {
+            var imagePath = AppSettings.ReadSysValue("ImagePath");
+            var project = "OMM-TEMP";
+            var image = "Image";
+            string path;
+            try
+            {
+                path = Path.Combine(imagePath, project, image);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[Save][Image] - check path error: {ex}");
+                throw new Exception($"save image error: {ex.Message}", ex);
+            }
+            Log.Info($"[Path] - get path: {path}");
+            return path;
+        }
+
         private void InitApiClient()
         {
-            _apiClient = new ApiClient(txtHttp.Text.Trim())
+            _ip = UtilHelp.GetLocalIPv4Addresses().FirstOrDefault();
+
+            DataSet dataSet = _sqLiteHelpers.ExecuteDataSet("SELECT * FROM Cfg", null);
+            if (dataSet != null)
+            {
+                foreach (DataRow r in dataSet.Tables[0].Rows)
+                {
+                    Global.CfgInfos.Add(new CfgInfo
+                    {
+                        Key = r["Key"].ToString(),
+                        Value = r["Value"].ToString()
+                    });
+                }
+            }
+
+            _apiClientOmm = new ApiClient(Global.CfgInfos.Count(p => p.Key == "Http") != 0 ? Global.CfgInfos.First(p => p.Key == "Http").Value : "http://localhost:8200/autolink")
+            {
+                LogRequestResponse = msg =>
+                {
+                    Log.Info($"[API] {DateTime.Now:HH:mm:ss} {msg}");
+                    //File.AppendAllText("api.log", $"{msg}\n\n");
+                }
+            };
+
+            _apiClientSend = new ApiClient(Global.CfgInfos.Count(p => p.Key == "HttpUrlSend") != 0 ? Global.CfgInfos.First(p => p.Key == "HttpUrlSend").Value : "http://localhost:8200/autolink")
             {
                 LogRequestResponse = msg =>
                 {
@@ -85,34 +147,25 @@ namespace OMMAuto
         private void MainForm_Load(object sender, EventArgs e)
         {
             LoadPlcTxt();
-            InitApiClient();
 
             PoolUi();
             PoolGetPlc();
             PoolSetPlc();
+            PoolPostUrl();
         }
 
         private void LoadPlcTxt()
         {
-            SQLiteParameter[] parameter = new SQLiteParameter[] { new SQLiteParameter("Key", "PLCIp") };
-            string sql = "SELECT * FROM Cfg WHERE Key=@Key";
-            DataSet dataSet = _sqLiteHelpers.ExecuteDataSet(sql, parameter);
-            //var ip = dataSet.Tables[0].Rows.Count == 0 ? txtIp.Text.Trim() : dataSet.Tables[0].Rows[0]["Value"].ToString();
-            if (dataSet.Tables[0].Rows.Count != 0)
-                txtIp.Text = dataSet.Tables[0].Rows[0]["Value"].ToString();
+            if (Global.CfgInfos.Count(p => p.Key == "PLCIp") != 0)
+                txtIp.Text = Global.CfgInfos.First(p => p.Key == "PLCIp").Value;
 
-            parameter = new SQLiteParameter[] { new SQLiteParameter("Key", "PLCPort") };
-            dataSet = _sqLiteHelpers.ExecuteDataSet(sql, parameter);
-            //var port = dataSet.Tables[0].Rows.Count == 0 ? txtPort.Text.Trim() : dataSet.Tables[0].Rows[0]["Value"].ToString();
-            if (dataSet.Tables[0].Rows.Count != 0)
-                txtPort.Text = dataSet.Tables[0].Rows[0]["Value"].ToString();
+            if (Global.CfgInfos.Count(p => p.Key == "PLCPort") != 0)
+                txtPort.Text = Global.CfgInfos.First(p => p.Key == "PLCPort").Value;
 
-            parameter = new SQLiteParameter[] { new SQLiteParameter("Key", "Http") };
-            dataSet = _sqLiteHelpers.ExecuteDataSet(sql, parameter);
-            if (dataSet.Tables[0].Rows.Count != 0)
-                txtHttp.Text = dataSet.Tables[0].Rows[0]["Value"].ToString();
+            if (Global.CfgInfos.Count(p => p.Key == "Http") != 0)
+                txtHttp.Text = Global.CfgInfos.First(p => p.Key == "Http").Value;
 
-            dataSet = _sqLiteHelpers.ExecuteDataSet("SELECT * FROM PLCCfg", null);
+            DataSet dataSet = _sqLiteHelpers.ExecuteDataSet("SELECT * FROM PLCCfg", null);
             if (dataSet != null)
             {
                 foreach (DataRow r in dataSet.Tables[0].Rows)
@@ -125,6 +178,7 @@ namespace OMMAuto
                     });
                 }
             }
+
             ConnPlc();
         }
 
@@ -164,6 +218,7 @@ namespace OMMAuto
                 checkAction: async () =>
                 {
                     await Task.Run(LoadLogTxt);
+                    await Task.Run(GetState);
 
                     return true; // 始终继续轮询
                 }
@@ -175,6 +230,83 @@ namespace OMMAuto
 
             // 启动轮询
             pollingService.Start();
+        }
+
+        private async void GetState()
+        {
+            // 具体操作代码
+            // 在后台线程执行耗时操作
+            await Task.Run(() =>
+            {
+                //Thread.Sleep(3000);  // 在后台线程阻塞（不影响 UI）
+                try
+                {
+                    if (chkIsStatusCheck.Checked)
+                    {
+                        var imageBitmap = ScreenShotHelp.GetImage();
+                        imageBitmap.Save(_fullFileName, ImageFormat.Jpeg);
+
+                        SetState(GetOmmStatus().Result.runStatus.StrToInt());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"获取图像状态失败: {ex}");
+                }
+            });
+        }
+
+        private void SetState(int stateValue)
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new SetStateDelegate(() => SetState(stateValue)));
+                return;
+            }
+            // 具体操作代码
+            switch (stateValue)
+            {
+                case 1:
+                    txtOther.BackColor = System.Drawing.Color.White;
+                    txtRun.BackColor = System.Drawing.Color.LimeGreen;
+                    txtPause.BackColor = System.Drawing.Color.White;
+                    txtExit.BackColor = System.Drawing.Color.White;
+                    txtPreOrEnd.BackColor = System.Drawing.Color.White;
+                    _status = 1;
+                    break;
+                case 2:
+                    txtOther.BackColor = System.Drawing.Color.White;
+                    txtRun.BackColor = System.Drawing.Color.White;
+                    txtPause.BackColor = System.Drawing.Color.LimeGreen;
+                    txtExit.BackColor = System.Drawing.Color.White;
+                    txtPreOrEnd.BackColor = System.Drawing.Color.White;
+                    _status = 2;
+                    break;
+                case 3:
+                    txtOther.BackColor = System.Drawing.Color.White;
+                    txtRun.BackColor = System.Drawing.Color.White;
+                    txtPause.BackColor = System.Drawing.Color.White;
+                    txtExit.BackColor = System.Drawing.Color.White;
+                    txtPreOrEnd.BackColor = System.Drawing.Color.LimeGreen;
+                    _status = 3;
+                    break;
+                case 4:
+                    txtOther.BackColor = System.Drawing.Color.White;
+                    txtRun.BackColor = System.Drawing.Color.White;
+                    txtPause.BackColor = System.Drawing.Color.White;
+                    txtExit.BackColor = System.Drawing.Color.LimeGreen;
+                    txtPreOrEnd.BackColor = System.Drawing.Color.White;
+                    _status = 4;
+                    break;
+                default:
+                    txtOther.BackColor = System.Drawing.Color.LimeGreen;
+                    txtRun.BackColor = System.Drawing.Color.White;
+                    txtPause.BackColor = System.Drawing.Color.White;
+                    txtExit.BackColor = System.Drawing.Color.White;
+                    txtPreOrEnd.BackColor = System.Drawing.Color.White;
+                    _status = 0;
+                    break;
+            }
         }
 
         private void LoadLogTxt()
@@ -793,7 +925,7 @@ namespace OMMAuto
                     IsTestMode = true
                 };
 
-                var newOrder = await _apiClient.PostAsync<TestResponse>("/api/testpost", requestData);
+                var newOrder = await _apiClientOmm.PostAsync<TestResponse>("/api/testpost", requestData);
             }
             catch (HttpRequestException ex)
             {
@@ -858,20 +990,145 @@ namespace OMMAuto
             _frmDicConfig.Show();
             _frmDicConfig.BringToFront();  // 激活并置顶窗体
         }
-    }
 
-    public class PlcInfo
-    {
-        public string PlcName { get; set; }
+        private void PoolPostUrl()
+        {
+            var pollingService = new PollingService(
+                pollingInterval: TimeSpan.FromSeconds(1),
+                checkAction: async () =>
+                {
+                    if (chkIsSend.Checked)
+                        await Task.Run(SendImgToServer);
 
-        public int Address { get; set; }
+                    return true; // 始终继续轮询
+                }
+            );
 
-        public int Count { get; set; }
-    }
+            // 订阅错误事件
+            pollingService.OnError += ex =>
+                Log.Error($"PoolPostUrl error: {ex.Message}");
 
-    public class Global
-    {
-        public static List<PlcInfo> PlcInfos = new List<PlcInfo>();
+            // 启动轮询
+            pollingService.Start();
+        }
+
+        private async void SendImgToServer()
+        {
+            await Task.Run(async () =>
+            {
+                // 初始化客户端
+                //var apiClient = new ApiClient("https://api.example.com/v1");
+                // 设置认证令牌
+                //_apiClient.SetBearerToken("your-access-token");
+
+                try
+                {
+                    // POST 请求示例
+                    var requestData = new Request
+                    {
+                        Status = _status,
+                        Ip = _ip,
+                        //ImageData = _cmmVisionHelp.GetPicImageData(_fullFileName)
+                    };
+
+                    await _apiClientSend.PostAsync<Response>(Global.CfgInfos.Count(p => p.Key == "InterfaceName") != 0 ?
+                        Global.CfgInfos.First(p => p.Key == "InterfaceName").Value : "/api/testpost", requestData);
+                }
+                catch (HttpRequestException ex)
+                {
+                    Log.Error($@"网络请求错误: {ex.Message}");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Log.Error($@"数据处理错误: {ex.Message}");
+                }
+            });
+        }
+
+        #region OMM接口
+
+        private async Task<InspectRunStatus> GetOmmStatus()
+        {
+            try
+            {
+                return await _apiClientSend.PostAsync<InspectRunStatus>(Global.CfgInfos.Count(p => p.Key == "InterfaceRun") != 0 ?
+                   Global.CfgInfos.First(p => p.Key == "InterfaceRun").Value : "/api/testpost", null);
+            }
+            catch (HttpRequestException ex)
+            {
+                Log.Error($@"网络请求错误: {ex.Message}");
+                return new InspectRunStatus
+                {
+                    deviceId = "000",
+                    runStatus = "-1"
+                };
+            }
+            catch (InvalidOperationException ex)
+            {
+                Log.Error($@"数据处理错误: {ex.Message}");
+                return new InspectRunStatus
+                {
+                    deviceId = "000",
+                    runStatus = "-1"
+                };
+            }
+        }
+
+
+        #endregion
+
+        private void btnIwpCfg_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PoolSendAi()
+        {
+            var pollingService = new PollingService(
+                pollingInterval: TimeSpan.FromSeconds(1),
+                checkAction: async () =>
+                {
+                    await Task.Run(WriteIwpName);
+
+                    return true; // 始终继续轮询
+                }
+            );
+
+            // 订阅错误事件
+            pollingService.OnError += ex =>
+                Log.Error($"PoolSendAi error: {ex.Message}");
+
+            // 启动轮询
+            pollingService.Start();
+        }
+
+        private async void WriteIwpName()
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    // POST 请求示例
+                    var requestData = new Request
+                    {
+                        Status = _status,
+                        Ip = _ip,
+                        //ImageData = _cmmVisionHelp.GetPicImageData(_fullFileName)
+                    };
+
+                    await _apiClientSend.PostAsync<Response>(Global.CfgInfos.Count(p => p.Key == "InterfaceName") != 0 ?
+                        Global.CfgInfos.First(p => p.Key == "InterfaceName").Value : "/api/testpost", requestData);
+                }
+                catch (HttpRequestException ex)
+                {
+                    Log.Error($@"网络请求错误: {ex.Message}");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Log.Error($@"数据处理错误: {ex.Message}");
+                }
+            });
+        }
     }
 
     public class TestRequest

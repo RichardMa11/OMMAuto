@@ -38,6 +38,7 @@ namespace OMMAuto
             this.grpRight = new System.Windows.Forms.GroupBox();
             this.panelOperate = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnDicConfig = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
             this.btnSaveHttp = new System.Windows.Forms.Button();
             this.panelAgvOperate = new System.Windows.Forms.Panel();
@@ -61,6 +62,7 @@ namespace OMMAuto
             this.label6 = new System.Windows.Forms.Label();
             this.lblCommInfo = new System.Windows.Forms.Label();
             this.grpCmmState = new System.Windows.Forms.GroupBox();
+            this.chkIsSend = new System.Windows.Forms.CheckBox();
             this.txtHttp = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.chkIsStatusCheck = new System.Windows.Forms.CheckBox();
@@ -77,7 +79,10 @@ namespace OMMAuto
             this.label3 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.txtOther = new System.Windows.Forms.TextBox();
-            this.btnDicConfig = new System.Windows.Forms.Button();
+            this.txtPause = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnIwpCfg = new System.Windows.Forms.Button();
             this.panelMiddle.SuspendLayout();
             this.panel1.SuspendLayout();
             this.grpLog.SuspendLayout();
@@ -170,6 +175,7 @@ namespace OMMAuto
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnIwpCfg);
             this.groupBox1.Controls.Add(this.btnDicConfig);
             this.groupBox1.Controls.Add(this.btnTest);
             this.groupBox1.Controls.Add(this.btnSaveHttp);
@@ -182,6 +188,23 @@ namespace OMMAuto
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "OMM操作";
+            // 
+            // btnDicConfig
+            // 
+            this.btnDicConfig.BackColor = System.Drawing.Color.LightBlue;
+            this.btnDicConfig.FlatAppearance.BorderSize = 0;
+            this.btnDicConfig.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightGray;
+            this.btnDicConfig.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.btnDicConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDicConfig.ForeColor = System.Drawing.Color.DarkBlue;
+            this.btnDicConfig.Location = new System.Drawing.Point(52, 78);
+            this.btnDicConfig.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnDicConfig.Name = "btnDicConfig";
+            this.btnDicConfig.Size = new System.Drawing.Size(96, 42);
+            this.btnDicConfig.TabIndex = 22;
+            this.btnDicConfig.Text = "数据字典";
+            this.btnDicConfig.UseVisualStyleBackColor = true;
+            this.btnDicConfig.Click += new System.EventHandler(this.btnDicConfig_Click);
             // 
             // btnTest
             // 
@@ -478,6 +501,10 @@ namespace OMMAuto
             // 
             // grpCmmState
             // 
+            this.grpCmmState.Controls.Add(this.textBox1);
+            this.grpCmmState.Controls.Add(this.label1);
+            this.grpCmmState.Controls.Add(this.txtPause);
+            this.grpCmmState.Controls.Add(this.chkIsSend);
             this.grpCmmState.Controls.Add(this.txtHttp);
             this.grpCmmState.Controls.Add(this.label14);
             this.grpCmmState.Controls.Add(this.chkIsStatusCheck);
@@ -504,12 +531,26 @@ namespace OMMAuto
             this.grpCmmState.TabStop = false;
             this.grpCmmState.Text = "OMM软件状态";
             // 
+            // chkIsSend
+            // 
+            this.chkIsSend.AutoSize = true;
+            this.chkIsSend.Checked = true;
+            this.chkIsSend.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkIsSend.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.chkIsSend.ForeColor = System.Drawing.Color.DarkBlue;
+            this.chkIsSend.Location = new System.Drawing.Point(249, 160);
+            this.chkIsSend.Name = "chkIsSend";
+            this.chkIsSend.Size = new System.Drawing.Size(73, 21);
+            this.chkIsSend.TabIndex = 35;
+            this.chkIsSend.Text = "发送监控";
+            this.chkIsSend.UseVisualStyleBackColor = true;
+            // 
             // txtHttp
             // 
             this.txtHttp.Location = new System.Drawing.Point(99, 199);
             this.txtHttp.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtHttp.Name = "txtHttp";
-            this.txtHttp.Size = new System.Drawing.Size(217, 23);
+            this.txtHttp.Size = new System.Drawing.Size(223, 23);
             this.txtHttp.TabIndex = 34;
             this.txtHttp.Text = "http://localhost:8200/autolink";
             this.txtHttp.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -518,11 +559,11 @@ namespace OMMAuto
             // 
             this.label14.AutoSize = true;
             this.label14.ForeColor = System.Drawing.Color.Gray;
-            this.label14.Location = new System.Drawing.Point(26, 202);
+            this.label14.Location = new System.Drawing.Point(20, 202);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(68, 17);
+            this.label14.Size = new System.Drawing.Size(78, 17);
             this.label14.TabIndex = 33;
-            this.label14.Text = "接口地址：";
+            this.label14.Text = "OMM接口：";
             // 
             // chkIsStatusCheck
             // 
@@ -531,7 +572,7 @@ namespace OMMAuto
             this.chkIsStatusCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkIsStatusCheck.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.chkIsStatusCheck.ForeColor = System.Drawing.Color.DarkBlue;
-            this.chkIsStatusCheck.Location = new System.Drawing.Point(243, 76);
+            this.chkIsStatusCheck.Location = new System.Drawing.Point(249, 120);
             this.chkIsStatusCheck.Name = "chkIsStatusCheck";
             this.chkIsStatusCheck.Size = new System.Drawing.Size(73, 21);
             this.chkIsStatusCheck.TabIndex = 32;
@@ -552,7 +593,7 @@ namespace OMMAuto
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.Gray;
-            this.label2.Location = new System.Drawing.Point(26, 162);
+            this.label2.Location = new System.Drawing.Point(20, 162);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(56, 17);
             this.label2.TabIndex = 30;
@@ -573,7 +614,7 @@ namespace OMMAuto
             // 
             this.label12.AutoSize = true;
             this.label12.ForeColor = System.Drawing.Color.Gray;
-            this.label12.Location = new System.Drawing.Point(26, 122);
+            this.label12.Location = new System.Drawing.Point(20, 122);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(56, 17);
             this.label12.TabIndex = 28;
@@ -586,9 +627,9 @@ namespace OMMAuto
             this.label10.ForeColor = System.Drawing.Color.DarkBlue;
             this.label10.Location = new System.Drawing.Point(26, 27);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(64, 17);
+            this.label10.Size = new System.Drawing.Size(56, 17);
             this.label10.TabIndex = 27;
-            this.label10.Text = "准备(结束)";
+            this.label10.Text = "接口断开";
             // 
             // txtPreOrEnd
             // 
@@ -608,7 +649,7 @@ namespace OMMAuto
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(32, 17);
             this.label5.TabIndex = 25;
-            this.label5.Text = "退出";
+            this.label5.Text = "运行";
             // 
             // label4
             // 
@@ -618,7 +659,7 @@ namespace OMMAuto
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(32, 17);
             this.label4.TabIndex = 24;
-            this.label4.Text = "其他";
+            this.label4.Text = "异常";
             // 
             // txtExit
             // 
@@ -646,7 +687,7 @@ namespace OMMAuto
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(32, 17);
             this.label3.TabIndex = 21;
-            this.label3.Text = "暂停";
+            this.label3.Text = "空闲";
             // 
             // label9
             // 
@@ -656,7 +697,7 @@ namespace OMMAuto
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(32, 17);
             this.label9.TabIndex = 20;
-            this.label9.Text = "运行";
+            this.label9.Text = "离线";
             // 
             // txtOther
             // 
@@ -668,22 +709,50 @@ namespace OMMAuto
             this.txtOther.Size = new System.Drawing.Size(21, 16);
             this.txtOther.TabIndex = 19;
             // 
-            // btnDicConfig
+            // txtPause
             // 
-            this.btnDicConfig.BackColor = System.Drawing.Color.LightBlue;
-            this.btnDicConfig.FlatAppearance.BorderSize = 0;
-            this.btnDicConfig.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightGray;
-            this.btnDicConfig.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
-            this.btnDicConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDicConfig.ForeColor = System.Drawing.Color.DarkBlue;
-            this.btnDicConfig.Location = new System.Drawing.Point(52, 78);
-            this.btnDicConfig.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnDicConfig.Name = "btnDicConfig";
-            this.btnDicConfig.Size = new System.Drawing.Size(96, 42);
-            this.btnDicConfig.TabIndex = 22;
-            this.btnDicConfig.Text = "数据字典";
-            this.btnDicConfig.UseVisualStyleBackColor = true;
-            this.btnDicConfig.Click += new System.EventHandler(this.btnDicConfig_Click);
+            this.txtPause.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtPause.Location = new System.Drawing.Point(285, 27);
+            this.txtPause.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtPause.Name = "txtPause";
+            this.txtPause.Size = new System.Drawing.Size(21, 16);
+            this.txtPause.TabIndex = 36;
+            // 
+            // textBox1
+            // 
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Location = new System.Drawing.Point(285, 78);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(21, 16);
+            this.textBox1.TabIndex = 38;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.DarkBlue;
+            this.label1.Location = new System.Drawing.Point(243, 78);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 17);
+            this.label1.TabIndex = 37;
+            this.label1.Text = "完成";
+            // 
+            // btnIwpCfg
+            // 
+            this.btnIwpCfg.BackColor = System.Drawing.Color.LightBlue;
+            this.btnIwpCfg.FlatAppearance.BorderSize = 0;
+            this.btnIwpCfg.FlatAppearance.MouseDownBackColor = System.Drawing.Color.LightGray;
+            this.btnIwpCfg.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Gainsboro;
+            this.btnIwpCfg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnIwpCfg.ForeColor = System.Drawing.Color.DarkBlue;
+            this.btnIwpCfg.Location = new System.Drawing.Point(195, 78);
+            this.btnIwpCfg.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnIwpCfg.Name = "btnIwpCfg";
+            this.btnIwpCfg.Size = new System.Drawing.Size(96, 42);
+            this.btnIwpCfg.TabIndex = 23;
+            this.btnIwpCfg.Text = "IWP配置";
+            this.btnIwpCfg.UseVisualStyleBackColor = true;
+            this.btnIwpCfg.Click += new System.EventHandler(this.btnIwpCfg_Click);
             // 
             // MainForm
             // 
@@ -773,6 +842,11 @@ namespace OMMAuto
         private System.Windows.Forms.Button btnSaveHttp;
         private System.Windows.Forms.Label lblPlcState;
         private System.Windows.Forms.Button btnDicConfig;
+        private System.Windows.Forms.CheckBox chkIsSend;
+        private System.Windows.Forms.TextBox txtPause;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnIwpCfg;
     }
 }
 

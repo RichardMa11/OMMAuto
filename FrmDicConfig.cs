@@ -206,6 +206,10 @@ namespace OMMAuto
             _configList.Add(new ConfigItem { Key = "InterfaceIsStart", Value = "select_ machinereadyresult", Remark = "查询机台是否就绪" });
             _configList.Add(new ConfigItem { Key = "InterfaceSignal", Value = "receive_measuring_signal", Remark = "上下料请求及完成信号" });
             _configList.Add(new ConfigItem { Key = "InterfaceIsLoading", Value = "receive_loading_unloading", Remark = "上下料接口" });
+
+            _configList.Add(new ConfigItem { Key = "HttpUrlSend", Value = "http://localhost:8200/autolink", Remark = "监控接口地址" });
+            _configList.Add(new ConfigItem { Key = "InterfaceName", Value = "/api/testpost", Remark = "监控接口地址后缀" });
+            _configList.Add(new ConfigItem { Key = "FilePath", Value = @"C:\OMM\IWP", Remark = "IWP名称存放路径" });
         }
     }
 }

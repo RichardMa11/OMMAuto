@@ -74,6 +74,7 @@
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.119.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
@@ -97,7 +98,10 @@
     <Compile Include="CommonHelp\ClsLock.cs" />
     <Compile Include="CommonHelp\LogHelp.cs" />
     <Compile Include="CommonHelp\PollingService.cs" />
+    <Compile Include="CommonHelp\ScreenShotHelp.cs" />
     <Compile Include="CommonHelp\SQLiteHelper.cs" />
+    <Compile Include="CommonHelp\UtilHelp.cs" />
+    <Compile Include="Config\AppSettings.cs" />
     <Compile Include="Extension\ConvertExtension.cs" />
     <Compile Include="FrmDicConfig.cs">
       <SubType>Form</SubType>
@@ -117,6 +121,7 @@
     <Compile Include="FrmQueryPlc.Designer.cs">
       <DependentUpon>FrmQueryPlc.cs</DependentUpon>
     </Compile>
+    <Compile Include="Global.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
